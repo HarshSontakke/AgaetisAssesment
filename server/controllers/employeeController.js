@@ -1,22 +1,22 @@
 const db = require("../config/db");
 
-const getEmployees = async (req, resp) => {
+const getEmployees = async (req, res) => {
     try {
         const { search } = req.query;
 
-        let query = 'Select * from employees';
+        let query = 'SELECT * FROM employees';
         let params = [];
 
         if (search) {
-            query += 'Where name LIKE ?';
+            query += ' WHERE name LIKE ?';
             params.push(`%${search}%`);
         }
-        query = + 'Order By created_at DESC';
+        query += ' ORDER BY created_at DESC';
 
         const [rows] = await db.query(query, params);
-        resp.status(200).json(rows);
+        res.status(200).json(rows);
     } catch (error) {
-        console.error('Error Fetchinng Employees:', error);
+        console.error('Error fetching employees:', error);
         res.status(500).json({ message: 'Server error while fetching employees' });
     }
 };
